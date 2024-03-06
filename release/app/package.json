@@ -1,0 +1,13 @@
+{
+  "name": "electron-umi",
+  "version": "4.6.0",
+  "description": "create umi and electron",
+  "author": "sunmy",
+  "main": "./dist/main/main.js",
+  "scripts": {
+    "rebuild": "node -r ts-node/register ../../electron/.erb/scripts/electron-rebuild.js",
+    "postinstall": "npm run rebuild && npm run link-modules",
+    "link-modules": "node -r ts-node/register ../../electron/.erb/scripts/link-modules.ts"
+  },
+  "dependencies": {}
+}
