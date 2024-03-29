@@ -18,7 +18,8 @@
     "start:electron": "ts-node ./electron/.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.preload.dev.ts",
-    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./electron/.erb/configs/webpack.config.renderer.dev.ts"
+    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./electron/.erb/configs/webpack.config.renderer.dev.ts",
+    "build:dll": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./electron/.erb/configs/webpack.config.preload.dev.dll.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
@@ -88,7 +89,7 @@
     "style-loader": "^3.3.3",
     "terser-webpack-plugin": "^5.3.9",
     "ts-jest": "^29.1.1",
-    "ts-loader": "^9.4.4",
+    "ts-loader": "^9.5.1",
     "ts-node": "^10.9.2",
     "tsconfig-paths-webpack-plugin": "^4.1.0",
     "typescript": "^5.0.3",
@@ -100,7 +101,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "ElectronReact",
+    "productName": "横截面",
     "appId": "org.erb.ElectronReact",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
@@ -114,8 +115,10 @@
       "target": {
         "target": "default",
         "arch": [
-          "arm64",
-          "x64"
+          "dmg",
+          "zip",
+          "pkg",
+          "mas"
         ]
       },
       "type": "distribution",
@@ -125,6 +128,7 @@
       "gatekeeperAssess": false
     },
     "dmg": {
+      "icon": "electron/assets/tray.png",
       "contents": [
         {
           "x": 130,
