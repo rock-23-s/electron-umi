@@ -4,22 +4,22 @@
   "main": "./electron/main/main.ts",
   "scripts": {
     "dev": "max dev",
-    "build": "max build",
     "format": "prettier --cache --write .",
     "prepare": "husky install",
     "setup": "max setup",
     "start": "npm run dev",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.main.prod.ts",
+    "build:umi": "max build",
+    "build": "concurrently \"npm run build:main\" \"npm run build:umi\"",
     "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.renderer.prod.ts",
+    "package": "ts-node ./electron/.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
     "postinstall": "max setup",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
-    "package": "ts-node ./electron/.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "start:electron": "ts-node ./electron/.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
     "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.preload.dev.ts",
-    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./electron/.erb/configs/webpack.config.renderer.dev.ts",
-    "build:dll": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./electron/.erb/configs/webpack.config.preload.dev.dll.ts"
+    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./electron/.erb/configs/webpack.config.renderer.dev.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
@@ -113,34 +113,8 @@
     ],
     "afterSign": "electron/.erb/scripts/notarize.js",
     "mac": {
-      "target": {
-        "target": "default",
-        "arch": [
-          "dmg",
-          "zip",
-          "pkg",
-          "mas"
-        ]
-      },
-      "type": "distribution",
-      "hardenedRuntime": true,
-      "entitlements": "electron/assets/entitlements.mac.plist",
-      "entitlementsInherit": "electron/entitlements.mac.plist",
-      "gatekeeperAssess": false
-    },
-    "dmg": {
-      "icon": "electron/assets/tray.png",
-      "contents": [
-        {
-          "x": 130,
-          "y": 220
-        },
-        {
-          "x": 410,
-          "y": 220,
-          "type": "link",
-          "path": "/Applications"
-        }
+      "target": [
+        "dmg"
       ]
     },
     "win": {

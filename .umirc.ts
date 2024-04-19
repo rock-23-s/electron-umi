@@ -15,5 +15,6 @@ export default defineConfig({
   hash: true,
   // 打包输出路径
   outputPath: 'release/app/dist/renderer',
+  publicPath: "./"
 });
 

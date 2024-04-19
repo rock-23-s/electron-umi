@@ -81,14 +81,16 @@ const createWindow = async () => {
     height: 728,
     icon: getAssetPath('icon.png'),
     webPreferences: {
+      sandbox: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../.erb/dll/preload.js'),
+        : path.join(__dirname, '../../.erb/dll/preload.js'),
     },
   });
 
-  console.log(resolveHtmlPath('index.html'), '00000000')
-  mainWindow.loadURL(resolveHtmlPath(''));
+  // mainWindow.loadURL(resolveHtmlPath(''));
+  // 加载 index.html
+  mainWindow.loadURL('https://github.com')
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {
