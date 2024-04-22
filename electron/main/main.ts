@@ -84,13 +84,14 @@ const createWindow = async () => {
       sandbox: false,
       preload: app.isPackaged
         ? path.join(__dirname, 'preload.js')
-        : path.join(__dirname, '../../.erb/dll/preload.js'),
+        : path.join(__dirname, '../.erb/dll/preload.js'),
     },
   });
 
-  // mainWindow.loadURL(resolveHtmlPath(''));
+  mainWindow.loadURL(resolveHtmlPath(''));
   // 加载 index.html
-  mainWindow.loadURL('https://github.com')
+  // mainWindow.loadURL('https://github.com')
+  mainWindow.webContents.openDevTools()
 
   mainWindow.on('ready-to-show', () => {
     if (!mainWindow) {

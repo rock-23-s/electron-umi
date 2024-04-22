@@ -6,15 +6,23 @@ export default defineConfig({
   access: {},
   model: {},
   initialState: {},
-  request: {},
   layout: {
     title: '@umijs/max',
+  },
+  locale: {
+    // default zh-CN
+    default: 'zh-CN',
+    antd: true,
+    // default true, when it is true, will use `navigator.language` overwrite default
+    baseNavigator: true,
   },
   routes,
   npmClient: 'yarn',
   hash: true,
+  base: './',
+  publicPath: "./",
+  history: { type: 'hash' },
   // 打包输出路径
   outputPath: 'release/app/dist/renderer',
-  publicPath: "./"
 });
 

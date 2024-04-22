@@ -1,6 +1,6 @@
 import type { IpcRendererEvent } from 'electron';
 import { contextBridge, ipcRenderer } from 'electron';
-import { isLinux, isMac, isWindows } from '../utils/os';
+import { isLinux, isMac, isWindows, osMachineId, osVersion, os } from '../utils/os';
 
 const electronHandler = {
   ipcRenderer: {
@@ -56,6 +56,9 @@ const electronHandler = {
     isLinux,
     isMac,
     isWindows,
+    osMachineId,
+    osVersion,
+    os
   },
 };
 

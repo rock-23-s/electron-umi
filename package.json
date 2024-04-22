@@ -18,7 +18,7 @@
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "start:electron": "ts-node ./electron/.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
-    "start:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.preload.dev.ts",
+    "build:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.preload.dev.ts",
     "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./electron/.erb/configs/webpack.config.renderer.dev.ts"
   },
   "dependencies": {
@@ -79,6 +79,7 @@
     "jest-environment-jsdom": "^29.7.0",
     "lint-staged": "^13.2.0",
     "mini-css-extract-plugin": "^2.7.6",
+    "node-machine-id": "^1.1.12",
     "prettier": "^2.8.7",
     "prettier-plugin-organize-imports": "^3.2.2",
     "prettier-plugin-packagejson": "^2.4.3",
