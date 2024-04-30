@@ -19,8 +19,10 @@ export default defineConfig({
   routes,
   npmClient: 'yarn',
   hash: true,
+  // 客户端打包改成 ./ ，网页端打包用 
   base: './',
-  publicPath: "./",
+  // 客户端打包改成 ./ ，网页端打包用
+  publicPath: process.env.NODE_ENV === 'production' ? "./" : '/',
   history: { type: 'hash' },
   // 打包输出路径
   outputPath: 'release/app/dist/renderer',

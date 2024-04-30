@@ -35,8 +35,21 @@ After the electron frame：
   ```
 
 ### TODO：
-  目前项目还没有将打包串通，打包这里可能会有bug，如需自行配置下，我这里目前只是将两个框架的搭配串通一下，以便将其他框架也可搭配electron使用
-  （At present, the project has not colluded with the packaging. There may be bugs in the packaging. If you need to configure it yourself, I am currently just colluding the two frameworks so that other frameworks can also be used with electron.）  
+  我这里的打包用的是electron-builder
+    [可以看打包教程总结](https://blog.csdn.net/rock_23/article/details/138131572)
+
+  打包不同适配的icon图标
+  
+  ```
+    yarn build-icon
+  ```
+
+  打包命令：
+
+  ```
+    yarn package
+  ```
+  
 
 
 

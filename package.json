@@ -11,15 +11,16 @@
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.main.prod.ts",
     "build:umi": "max build",
     "build": "concurrently \"npm run build:main\" \"npm run build:umi\"",
-    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.renderer.prod.ts",
     "package": "ts-node ./electron/.erb/scripts/clean.js dist && npm run build && electron-builder build --publish never",
+    "build:renderer": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.renderer.prod.ts",
     "postinstall": "max setup",
     "lint": "cross-env NODE_ENV=development eslint . --ext .js,.jsx,.ts,.tsx",
     "rebuild": "electron-rebuild --parallel --types prod,dev,optional --module-dir release/app",
     "start:electron": "ts-node ./electron/.erb/scripts/check-port-in-use.js && npm run start:renderer",
     "start:main": "cross-env NODE_ENV=development electronmon -r ts-node/register/transpile-only .",
     "build:preload": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack --config ./electron/.erb/configs/webpack.config.preload.dev.ts",
-    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./electron/.erb/configs/webpack.config.renderer.dev.ts"
+    "start:renderer": "cross-env NODE_ENV=development TS_NODE_TRANSPILE_ONLY=true webpack serve --config ./electron/.erb/configs/webpack.config.renderer.dev.ts",
+    "build-icon": "electron-icon-builder --input=./electron/assets/icon.png --output=./electron/build --flatten"
   },
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
@@ -58,6 +59,7 @@
     "electron": "^26.2.1",
     "electron-builder": "^24.6.4",
     "electron-devtools-installer": "^3.2.0",
+    "electron-icon-builder": "^2.0.1",
     "electronmon": "^2.0.2",
     "eslint": "^8.49.0",
     "eslint-config-airbnb-base": "^15.0.0",
@@ -103,7 +105,7 @@
     "webpack-merge": "^5.9.0"
   },
   "build": {
-    "productName": "横截面",
+    "productName": "electron-umi",
     "appId": "org.erb.ElectronReact",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
@@ -112,22 +114,94 @@
       "node_modules",
       "package.json"
     ],
-    "afterSign": "electron/.erb/scripts/notarize.js",
+    "icon": "electron/assets/icon.ico",
+    "nsis": {
+      "artifactName": "微鳳",
+      "oneClick": false,
+      "perMachine": true,
+      "allowElevation": true,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "./electron/assets/icon.ico",
+      "uninstallerIcon": "./electron/assets/icon.ico",
+      "installerHeaderIcon": "./electron/assets/icon.ico",
+      "installerSidebar": "./electron/assets/sidebar-164x314.bmp",
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "include": "./electron/build/installer.nsh"
+    },
     "mac": {
-      "target": [
-        "dmg"
+      "target": {
+        "target": "default",
+        "arch": [
+          "arm64",
+          "x64"
+        ]
+      },
+      "type": "distribution",
+      "hardenedRuntime": true,
+      "entitlements": "electron/assets/entitlements.mac.plist",
+      "entitlementsInherit": "electron/assets/entitlements.mac.plist",
+      "gatekeeperAssess": false,
+      "icon": "electron/assets/icon.icns"
+    },
+    "dmg": {
+      "icon": "electron/assets/icon.icns",
+      "sign": false,
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
       ]
     },
     "win": {
-      "target": [
-        "nsis"
-      ]
+      "icon": "electron/build/icons/512x512.png",
+      "target": {
+        "target": "nsis",
+        "arch": [
+          "ia32"
+        ]
+      }
     },
     "linux": {
+      "maintainer": "123",
       "target": [
-        "AppImage"
+        {
+          "target": "deb",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
       ],
-      "category": "Development"
+      "executableName": "dingtalk",
+      "icon": "./electron/assets/icons",
+      "category": "InstantMessaging;Network"
+    },
+    "deb": {
+      "depends": [
+        "libc6",
+        "libx11-6",
+        "libxrandr2"
+      ]
+    },
+    "rpm": {
+      "depends": [
+        "libc6",
+        "libx11-6",
+        "libxrandr2"
+      ]
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "electron-umi",
+      "repo": "electron-umi"
     },
     "directories": {
       "app": "release/app",
@@ -135,13 +209,14 @@
       "output": "release/build"
     },
     "extraResources": [
-      "./electron/assets/**"
-    ],
-    "publish": {
-      "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
-    }
+      {
+        "from": "./electron/assets/",
+        "to": "assets",
+        "filter": [
+          "**/*"
+        ]
+      }
+    ]
   },
   "collective": {
     "url": "https://opencollective.com/electron-react-boilerplate-594"
