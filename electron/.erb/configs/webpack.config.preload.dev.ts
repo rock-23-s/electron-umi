@@ -65,7 +65,7 @@ const configuration: webpack.Configuration = {
     __filename: false,
   },
 
-  watch: true,
+  watch: false,
 };
 
 export default merge(baseConfig, configuration);

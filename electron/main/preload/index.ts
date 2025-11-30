@@ -1,6 +1,21 @@
 import type { IpcRendererEvent } from 'electron';
 import { contextBridge, ipcRenderer } from 'electron';
 import { isLinux, isMac, isWindows, osMachineId, osVersion, os } from '../utils/os';
+import { LayoutEnums } from '../../../src/enums/layout'
+
+const windowLoaded = new Promise(resolve => {
+  window.onload = resolve
+})
+
+// 监听来自主进程的 webContents.postMessage
+ipcRenderer.on(LayoutEnums.POSTMESSAGE, async (event: any) => {
+  console.log('[preload] got main-message, forwarding port to window.main world', event.data, 'ports:', event.ports);
+  await windowLoaded;
+
+  // 把 port 转发给页面主世界
+  // 注意 event.ports 是一个可传递的 MessagePortMain 实例数组
+  window.postMessage(LayoutEnums.POSTMESSAGE, '*', event.ports);
+});
 
 const electronHandler = {
   ipcRenderer: {
